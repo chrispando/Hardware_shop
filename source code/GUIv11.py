@@ -12,11 +12,11 @@ admins = {"admin":"password"}
 employees=[]
 supervisors = []
 
-hw_path="C:\\Users\CHR5S\Desktop\Hardware.xlsx"
-activity_path="C:\\Users\CHR5S\Desktop\Activity.xlsx"
-backup_path="C:\\Users\CHR5S\Desktop\Backup.xlsx"
-cs_path="C:\\Users\CHR5S\Desktop\Customer_Survey.xlsx"
-dept_path="C:\\Users\CHR5S\Desktop\Departments.xlsx"
+hw_path="Hardware.xlsx"
+activity_path="Activity.xlsx"
+backup_path="Backup.xlsx"
+cs_path="Customer_Survey.xlsx"
+dept_path="Departments.xlsx"
 
 count=0
 class Login(Frame):
@@ -62,21 +62,23 @@ class Login(Frame):
         submit.place(relx=.5, rely=.6, anchor=CENTER)
         
         
-        
-        
 class AdminSupervisorEdit(Frame):
     def __init__(self,master):
-        master.title("Edit Employee")
+        master.title("Edit Supervisor")
         master.geometry("500x500")
         for widget in master.winfo_children():
             widget.destroy()
         def edit(a,b,c,d,e):
             for obj in supervisors: 
                 if obj.id == a:
-                    obj.name=b
-                    obj.addr=c
-                    obj.phone=d
-                    obj.password=e
+                    if b != '':
+                        obj.name=b
+                    if c != '':
+                        obj.addr=c
+                    if d != '':
+                        obj.phone=d
+                    if e != '':
+                        obj.password=e
             Login(root)
         def goHome():
             Admin(root)
@@ -99,6 +101,8 @@ class AdminSupervisorEdit(Frame):
         PasswordEntry=Entry(master,textvariable=new_password).grid(column=1,row=4)
         submit = Button(master, text= "Edit Supervisor",command=lambda:edit(new_id.get(),new_name.get(),
                                                                             new_address.get(),new_phone.get(),new_password.get())).grid(column=0,row=5)
+        
+        delete=Button(master, text = "Delete Supervisor").grid(column=1,row=5)
         #Employee menu bar
         menubar = Menu(master)
         goHomeMenu = Menu(menubar, tearoff=0)
@@ -359,10 +363,14 @@ class AdminEmployeeEdit(Frame):
         def edit(a,b,c,d,e):
             for obj in employees: 
                 if obj.id == a:
-                    obj.name=b
-                    obj.addr=c
-                    obj.phone=d
-                    obj.password=e
+                    if b != '':
+                        obj.name=b
+                    if c != '':
+                        obj.addr=c
+                    if d != '':
+                        obj.phone=d
+                    if e != '':
+                        obj.password=e
             Login(root)
         def goHome():
             Admin(root)
@@ -1002,11 +1010,13 @@ class Employee(Frame):
         employeeActivity=Button(master,text="Activity Log",command=activityLog,width=30,height=5)
         employeeActivity.place(relx=.5,rely=.8,anchor=CENTER)
 class Departments(Frame):
-    def __init__(self,master,who):
+    def __init__(self, master, who):
         master.title("Departments")
         master.geometry("500x500")
+
         def logOutBar():
             Login(root)
+
         def goHome():
             if who == "Admin":
                 Admin(root)
@@ -1014,6 +1024,7 @@ class Departments(Frame):
                 Supervisor(root)
             else:
                 Employee(root)
+
         for widget in master.winfo_children():
             widget.destroy()
         wb = Workbook()
@@ -1022,103 +1033,102 @@ class Departments(Frame):
         def set_Sheet_Hardware():
             wb.active = 0
             ws = (wb.active)
-            global column_a 
-            column_a= ws['A']
-            global column_b 
-            column_b= ws['B']
+            global column_a
+            column_a = ws['A']
+            global column_b
+            column_b = ws['B']
             get_info()
 
         def set_Sheet_Electrical():
             wb.active = 1
             ws = (wb.active)
-            global column_a 
-            column_a= ws['A']
-            global column_b 
-            column_b= ws['B']
+            global column_a
+            column_a = ws['A']
+            global column_b
+            column_b = ws['B']
             get_info()
 
         def set_Sheet_plumbing():
             wb.active = 2
             ws = (wb.active)
-            global column_a 
-            column_a= ws['A']
-            global column_b 
-            column_b= ws['B']
+            global column_a
+            column_a = ws['A']
+            global column_b
+            column_b = ws['B']
             get_info()
-        
+
         def set_Sheet_Flooring():
             wb.active = 3
             ws = (wb.active)
-            global column_a 
-            column_a= ws['A']
-            global column_b 
-            column_b= ws['B']
+            global column_a
+            column_a = ws['A']
+            global column_b
+            column_b = ws['B']
             get_info()
 
         def set_Sheet_Lumber():
             wb.active = 4
             ws = (wb.active)
-            global column_a 
-            column_a= ws['A']
-            global column_b 
-            column_b= ws['B']
+            global column_a
+            column_a = ws['A']
+            global column_b
+            column_b = ws['B']
             get_info()
-        
-
 
         def get_info():
             get_a()
             get_b()
-            
 
-            label_a.place(relx=.5,rely=.2,anchor=CENTER)
-            label_b.place(relx=.7,rely=.2,anchor=CENTER)
-            
+            label_a.place(relx=.5, rely=.2, anchor=CENTER)
+            label_b.place(relx=.7, rely=.2, anchor=CENTER)
+
         def get_a():
-            list =''
+            list = ''
             for cell in column_a:
-                
-                list = f' {list+str(cell.value)}\n'
+                list = f' {list + str(cell.value)}\n'
 
-            label_a.config(text=list) 
+            label_a.config(text=list)
 
         def get_b():
-            list =''
+            list = ''
             for cell in column_b:
-                list = f'{list+str(cell.value)}\n'
+                list = f'{list + str(cell.value)}\n'
 
             label_b.config(text=list)
 
-        
-        Hardware_Button = Button(master, text="View Hardware",command=set_Sheet_Hardware)
-        Hardware_Button.place(relx=.15,rely=.1,anchor=CENTER)
-        Electrical_Button = Button(master, text="View Electrial",command=set_Sheet_Electrical)
-        Electrical_Button.place(relx=.15,rely=.2,anchor=CENTER)
-        Plumbing_Button = Button(master, text="View Plumbing",command=set_Sheet_plumbing)
-        Plumbing_Button.place(relx=.15,rely=.3,anchor=CENTER)
-        Flooring_Button = Button(master, text="View Flooring",command=set_Sheet_Flooring)
-        Flooring_Button.place(relx=.15,rely=.4,anchor=CENTER)
+        Hardware_Button = Button(master, text="View Hardware", command=set_Sheet_Hardware)
+        Hardware_Button.place(relx=.15, rely=.1, anchor=CENTER)
+        Electrical_Button = Button(master, text="View Electrical", command=set_Sheet_Electrical)
+        Electrical_Button.place(relx=.15, rely=.2, anchor=CENTER)
+        Plumbing_Button = Button(master, text="View Plumbing", command=set_Sheet_plumbing)
+        Plumbing_Button.place(relx=.15, rely=.3, anchor=CENTER)
+        Flooring_Button = Button(master, text="View Flooring", command=set_Sheet_Flooring)
+        Flooring_Button.place(relx=.15, rely=.4, anchor=CENTER)
 
-        Lumber_Button = Button(master, text="View Lumber",command=set_Sheet_Lumber)
-        Lumber_Button.place(relx=.15,rely=.5,anchor=CENTER)
+        Lumber_Button = Button(master, text="View Lumber", command=set_Sheet_Lumber)
+        Lumber_Button.place(relx=.15, rely=.5, anchor=CENTER)
 
         label_a = Label(master, text="")
         label_b = Label(master, text="")
-        #Employee menu bar
+        # Employee menu bar
         menubar = Menu(master)
         goHomeMenu = Menu(menubar, tearoff=0)
-        goHomeMenu.add_command(label = "Home",command=goHome)
-        menubar.add_cascade(label="Home",menu=goHomeMenu)
+        goHomeMenu.add_command(label="Home", command=goHome)
+        menubar.add_cascade(label="Home", menu=goHomeMenu)
         logoutMenu = Menu(menubar, tearoff=0)
-        logoutMenu.add_command(label = "Log Out",command=logOutBar)
-        menubar.add_cascade(label="Log Out",menu=logoutMenu)
+        logoutMenu.add_command(label="Log Out", command=logOutBar)
+        menubar.add_cascade(label="Log Out", menu=logoutMenu)
         master.config(menu=menubar)
 class Activity_Log():
-    def __init__(self,master,who):
+    def __init__(self, master, who):
         master.title("Activity Log")
         master.geometry("500x500")
         for widget in master.winfo_children():
             widget.destroy()
+
+        def logOutBar():
+            Login(root)
+
         def goHome():
             if who == "Admin":
                 Admin(root)
@@ -1126,47 +1136,82 @@ class Activity_Log():
                 Supervisor(root)
             else:
                 Employee(root)
-        def logOutBar():
-            Login(root)
-         #Update Microsoft Excel Spreadsheet Function
-        def updateExcel(x,y,z):
-            #Get Size of Activity Log and start count at len(activity_size)
-            global count
-            df2.loc[count]=[x,y,z]
-            with pd.ExcelWriter(activity_path) as writer:
-                df2.to_excel(writer)
-            count+=1
+
+        # Update Microsoft Excel Spreadsheet Function
+        def updateExcel():
+            # Get Size of Activity Log and start count at len(activity_size)
+            wb = Workbook()
+            wb = load_workbook(activity_path)
+
+            wb.active = 0
+            ws = (wb.active)
+            column_b = ws['B']
+            if ((employee.get() != "") & (description.get() != "") & (time.get() != "")):
+                i = 2
+                while (True):
+                    cell1 = 'A' + str(i)
+                    cell2 = 'B' + str(i)
+                    cell3 = 'C' + str(i)
+                    cell4 = 'D' + str(i)
+                    if (ws[cell2].value == None):
+                        ws[cell1] = i - 1
+                        ws[cell2] = employee.get()
+                        ws[cell3] = description.get()
+                        ws[cell4] = time.get()
+                        wb.save(activity_path)
+                        test.grid_forget()
+                        break
+                    i += 1
+
+            else:
+                test.grid(row=35,column=10,padx=10,pady=25)
+               
+
+                    
+                
+
+        global employee
+        global description 
+        global time
+        global test
+        employee = StringVar()
+        description = StringVar()
+        time = StringVar()
+
+        elabel = Label(master, text="Employee ID").grid(row=5, column=0, padx=10, pady=25)
+        dlabel = Label(master, text="Description").grid(row=15, column=0, padx=10, pady=25)
+        tlabel = Label(master, text="Time").grid(row=25, column=0, padx=10, pady=25)
+        e = Entry(master, textvariable=employee, width=20).grid(row=5, column=5, padx=10, pady=25)
+        d = Entry(master, textvariable=description, width=20).grid(row=15, column=5, padx=10, pady=25)
+        t = Entry(master, textvariable=time, width=20).grid(row=25, column=5, padx=10, pady=25)
+
+        update_button = Button(master, text="Update",command=updateExcel)
+        update_button.grid(row=35, column=5, padx=10, pady=25)
         
-        df2=pd.DataFrame(columns=['EmployeeID','Description','Time'])    
-        df = pd.read_excel(activity_path)
-        activityLabel = Label(master,text=df).grid(row=0,column=0)
-        employee=StringVar()
-        description=StringVar()
-        time=StringVar()
-        elabel=Label(master,text="Employee ID").grid(row=3,column=0)
-        dlabel=Label(master,text="Description").grid(row=4,column=0)
-        tlabel=Label(master,text="Time").grid(row=5,column=0)
-        e=Entry(master,textvariable=employee,width=20).grid(row=3,column=1)
-        d=Entry(master,textvariable=description,width=20).grid(row=4,column=1)
-        t=Entry(master,textvariable=time,width=20).grid(row=5,column=1)
-        update_button=Button(master,text="Update",command=lambda: updateExcel(employee.get(),description.get(),time.get()))
-        update_button.grid(row=6,column=0)
-        #Implement function to clear the activity log
+        test= Label(master, text="All Sections must be filled out.",fg="red")
+        test.grid(row=35,column=10,padx=10,pady=25)
+        test.grid_forget()
+        
         if who=="Admin":
             def delete():
                 df = pd.DataFrame([[], [], []])
                 with pd.ExcelWriter(activity_path) as writer:
                     df.to_excel(writer)
-            delete_Buton=Button(master,text="Delete Activity Log",command=delete).grid(row=7,column=0)
-        #Employee menu bar
+                deleted = Label(master, text = "Activity Log Cleared").grid(row=1,column=5,padx=10,pady=25)
+            delete_Buton=Button(master,text="Delete Activity Log",command=delete).grid(row=37, column=5, padx=10, pady=25)
+            
+
+
+        # Employee menu bar
         menubar = Menu(master)
         goHomeMenu = Menu(menubar, tearoff=0)
-        goHomeMenu.add_command(label = "Home",command=goHome)
-        menubar.add_cascade(label="Home",menu=goHomeMenu)
+        goHomeMenu.add_command(label="Home", command=goHome)
+        menubar.add_cascade(label="Home", menu=goHomeMenu)
         logoutMenu = Menu(menubar, tearoff=0)
-        logoutMenu.add_command(label = "Log Out",command=logOutBar)
-        menubar.add_cascade(label="Log Out",menu=logoutMenu)
+        logoutMenu.add_command(label="Log Out", command=logOutBar)
+        menubar.add_cascade(label="Log Out", menu=logoutMenu)
         master.config(menu=menubar)
+
 
 app = Login(root)
 root.mainloop()
